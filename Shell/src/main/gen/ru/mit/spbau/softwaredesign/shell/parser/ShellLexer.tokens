@@ -1,0 +1,12 @@
+WS=1
+PIPE=2
+CHAR_SEQUENCE=3
+DOLAR=4
+STRONG_QUOTE=5
+WEAK_QUOTE=6
+EQ=7
+'|'=2
+'$'=4
+'\''=5
+'"'=6
+'='=7
