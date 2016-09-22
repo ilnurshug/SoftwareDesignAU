@@ -36,4 +36,15 @@ class UtilsKtTest {
         assertEquals(1, exit(arrayOf(), "").first)
     }
 
+    @Test
+    fun grep() {
+        assertEquals("", grep(arrayOf("hello"), "Hello, world").second)
+        assertEquals("Hello, world\n", grep(arrayOf("Hello"), "Hello, world").second)
+        assertEquals("Hello, world\n", grep(arrayOf("^Hello"), "Hello, world").second)
+        assertEquals("", grep(arrayOf("Hello$"), "Hello, world").second)
+        assertEquals("Hello, world\n", grep(arrayOf("-i", "HELLO"), "Hello, world").second)
+        assertEquals("", grep(arrayOf("HELLO"), "Hello, world").second)
+        assertEquals("Hello\n", grep(arrayOf("-i", "-w", "HELLO"), "Hello, world").second)
+    }
+
 }
