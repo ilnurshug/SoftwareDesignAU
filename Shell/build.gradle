@@ -7,19 +7,33 @@ buildscript {
     repositories {
         mavenCentral()
     }
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
-apply plugin: 'kotlin'
+configurations {
+    antlr4 {
+        description = "ANTLR4"
+    }
+}
+
 apply plugin: 'antlr'
+apply plugin: 'kotlin'
 
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     antlr "org.antlr:antlr4:4.5"
+    compile 'com.github.jshmrsn:karg:a636b3e'
 }
+
+compileKotlin {
+    dependsOn generateGrammarSource
+}
+
