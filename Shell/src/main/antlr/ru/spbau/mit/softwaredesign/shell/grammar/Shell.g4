@@ -1,5 +1,10 @@
 grammar Shell;
 
+
+@header {
+    package ru.spbau.mit.softwaredesign.shell.grammar;
+}
+
 // constants
 WS              : [\t\r ] -> skip;
 PIPE            : '|';
@@ -14,7 +19,7 @@ name
     : CHAR_SEQUENCE;
 
 content
-    : ~('\r' | '\n') ;
+    : ~('\r' | '\n' | '"' | '\'' ) | ',' ;
 
 variable
     : (DOLAR)name;
@@ -36,6 +41,7 @@ identifier
 // entities
 argument
     : identifier
+    | '-' identifier
     | string;
 
 lhs

@@ -55,10 +55,10 @@ object Environment {
      * @param file: related name
      * @return file content
      */
-    fun readFile(file: String): String {
+    fun readFile(file: String): String? {
         val file = File("${path}/$file")
         if (file.exists().not()) {
-            throw FileNotFoundException()
+            return null
         }
 
         return InputStreamReader(file.inputStream()).readText()
