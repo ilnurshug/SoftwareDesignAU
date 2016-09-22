@@ -4,7 +4,6 @@ import ru.spbau.mit.softwaredesign.shell.pipeline.AssignmentNode
 import ru.spbau.mit.softwaredesign.shell.pipeline.CommandNode
 import ru.spbau.mit.softwaredesign.shell.pipeline.ExecutableNode
 import ru.spbau.mit.softwaredesign.shell.pipeline.Pipeline
-import ru.spbau.mit.softwaredesign.shell.utils.CommandNotFoundException
 import ru.spbau.mit.softwaredesign.shell.utils.NonZeroResultException
 import ru.spbau.mit.softwaredesign.shell.utils.UnknownNodeType
 
@@ -61,18 +60,23 @@ object Executor {
         return result
     }
 
-    private fun execute(command: ExecutableNode, input: String): Pair<Int, String> {
-        return when (command) {
+    private fun execute(command: ExecutableNode, input: String): Pair<Int, String> = when (command) {
             is AssignmentNode -> {
                 Environment[command.variable] = command.content
                 Pair(0, input)
             }
             is CommandNode -> {
-                val call = commands[command.name] ?: throw CommandNotFoundException(command.name)
-                call.invoke(command.args, input)
+                val call = commands[command.name]?.invoke(command.args, input)
+                if (call != null) {
+                    call
+                } else {
+                    val task = "${command.name} ${command.args.joinToString(" ")}"
+                    val process = Runtime.getRuntime().exec(task)
+                    val code = process.waitFor()
+                    Pair(code, process.inputStream.reader().readText())
+                }
             }
             else -> throw UnknownNodeType(command.toString())
         }
-    }
 }
 

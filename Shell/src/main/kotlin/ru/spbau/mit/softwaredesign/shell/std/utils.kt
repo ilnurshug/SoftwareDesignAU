@@ -30,7 +30,7 @@ fun cat(args: Array<String>, input: String): Pair<Int, String> {
 }
 
 /**
- * Word count]
+ * Word count
  * @param args array of arguments
  * @param input stdin
  * @return pair of exit code and stdout

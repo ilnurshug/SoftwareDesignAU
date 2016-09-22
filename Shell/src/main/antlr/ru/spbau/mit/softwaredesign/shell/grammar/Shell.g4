@@ -7,7 +7,7 @@ grammar Shell;
 // constants
 WS              : [\t\r ] -> skip;
 PIPE            : '|';
-CHAR_SEQUENCE   : [\.a-zA-z0-9]+;
+CHAR_SEQUENCE   : [/\.a-zA-z0-9]+;
 DOLAR           : '$';
 STRONG_QUOTE    : '\'';
 WEAK_QUOTE      : '"';
@@ -18,7 +18,7 @@ name
     : CHAR_SEQUENCE;
 
 content
-    : CHAR_SEQUENCE;
+    : ~('\r' | '\n') ;
 
 variable
     : (DOLAR)name;
