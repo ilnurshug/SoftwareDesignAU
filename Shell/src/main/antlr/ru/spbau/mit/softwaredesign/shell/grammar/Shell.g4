@@ -1,9 +1,5 @@
 grammar Shell;
 
-@header {
-    package ru.spbau.mit.softwaredesign.shell.grammar;
-}
-
 // constants
 WS              : [\t\r ] -> skip;
 PIPE            : '|';

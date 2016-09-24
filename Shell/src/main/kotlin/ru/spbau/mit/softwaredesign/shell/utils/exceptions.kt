@@ -17,3 +17,6 @@ class CommandNotFoundException(name: String)
 
 class UnknownNodeType(type: String)
     : Exception("Unknown node type: $type")
+
+class DirNotFoundException(dir: String)
+    : Exception("Dir $dir not found")

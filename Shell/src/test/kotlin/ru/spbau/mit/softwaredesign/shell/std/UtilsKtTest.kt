@@ -3,6 +3,7 @@ package ru.spbau.mit.softwaredesign.shell.std
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
+import java.nio.file.Paths
 
 class UtilsKtTest {
     @Test
@@ -36,4 +37,45 @@ class UtilsKtTest {
         assertEquals(1, exit(arrayOf(), "").first)
     }
 
+    @Test
+    fun ls() {
+        val res = """/home/ilnur/Documents/SoftwareDesignAU/Shell:
+settings.gradle
+gradlew.bat
+.gitignore
+build.gradle
+README.md
+gradlewgradle
+build
+.idea
+src"""
+
+        assertEquals(res, ls(arrayOf(), "").second)
+
+        val res2 = """src/main:
+antlr
+gen
+kotlin
+
+build:
+classes"""
+
+        assertEquals(res2, ls(arrayOf("src/main", "build"), "").second)
+    }
+
+    @Test
+    fun cd() {
+        val curPath = Paths.get("")
+        val srcPath = Paths.get("src")
+        val srcMainPath = Paths.get("src/main")
+
+        cd(arrayOf("src/main"), "")
+        assertEquals(srcMainPath.toAbsolutePath().toString(), pwd(arrayOf(), "").second)
+
+        cd(arrayOf(".."), "")
+        assertEquals(srcPath.toAbsolutePath().toString(), pwd(arrayOf(), "").second)
+
+        cd(arrayOf(".."), "")
+        assertEquals(curPath.toAbsolutePath().toString(), pwd(arrayOf(), "").second)
+    }
 }

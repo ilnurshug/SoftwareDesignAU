@@ -1,19 +1,35 @@
 package ru.spbau.mit.softwaredesign.shell
 
+import ru.spbau.mit.softwaredesign.shell.utils.DirNotFoundException
 import ru.spbau.mit.softwaredesign.shell.utils.VariableUndefinedException
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStreamReader
+import java.nio.file.Paths
 
 /**
  * Shell environment.
  * Store for local vars and path.
  */
 object Environment {
-    var path = File("")
-        private set
+    fun path() = System.getProperty("user.dir")
 
     private val vars = hashMapOf<String, String>()
+
+    /**
+     * Change user's working directory
+     * @param dir directory name
+     */
+    fun setUserDir(dir: String) {
+        val path = Paths.get(path()).resolve(dir).normalize().toAbsolutePath()
+
+        if (File(path.toString()).isDirectory) {
+            System.setProperty("user.dir", path.toString())
+        }
+        else {
+            throw DirNotFoundException(dir)
+        }
+    }
 
     /**
      * Read variable from context
@@ -39,11 +55,19 @@ object Environment {
      * @return file content
      */
     fun readFile(file: String): String {
-        val file = File("${path.absolutePath}/$file")
+        val file = File("${path()}/$file")
         if (file.exists().not()) {
             throw FileNotFoundException()
         }
 
         return InputStreamReader(file.inputStream()).readText()
+    }
+
+    fun listFilesInDir(dir: String): List<String> {
+        return File(dir).listFiles { f -> !f.isDirectory }.map { f -> f.name }
+    }
+
+    fun listDirsInDir(dir: String): List<String> {
+        return File(dir).listFiles { f -> f.isDirectory }.map { f -> f.name }
     }
 }
