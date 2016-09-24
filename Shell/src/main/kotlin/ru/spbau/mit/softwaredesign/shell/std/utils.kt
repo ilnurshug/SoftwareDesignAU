@@ -7,7 +7,6 @@ import ru.spbau.mit.softwaredesign.shell.utils.ArgumentsException
 import java.io.File
 import java.io.FileNotFoundException
 
-
 /**
  * Immutable index of embed commands.
  */

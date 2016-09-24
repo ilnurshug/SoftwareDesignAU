@@ -38,8 +38,19 @@ class UtilsKtTest {
     }
 
     @Test
+    fun grep() {
+        assertEquals("", grep(arrayOf("hello"), "Hello, world").second)
+        assertEquals("Hello, world\n", grep(arrayOf("Hello"), "Hello, world").second)
+        assertEquals("Hello, world\n", grep(arrayOf("^Hello"), "Hello, world").second)
+        assertEquals("", grep(arrayOf("Hello$"), "Hello, world").second)
+        assertEquals("Hello, world\n", grep(arrayOf("-i", "HELLO"), "Hello, world").second)
+        assertEquals("", grep(arrayOf("HELLO"), "Hello, world").second)
+        assertEquals("Hello\n", grep(arrayOf("-i", "-w", "HELLO"), "Hello, world").second)
+    }
+
+    @Test
     fun ls() {
-        val res = """/home/ilnur/Documents/SoftwareDesignAU/Shell:
+        val res = """${File("").absolutePath}:
 settings.gradle
 gradlew.bat
 .gitignore
@@ -48,6 +59,7 @@ README.md
 gradlew
 gradle
 build
+.gradle
 .idea
 src"""
 
@@ -55,18 +67,24 @@ src"""
 
         val res2 = """src/main:
 antlr
-gen
 kotlin
 
 build:
-classes"""
+classes
+tmp
+generated-src
+reports
+dependency-cache
+test-results
+libs
+kotlin-classes"""
 
         assertEquals(res2, ls(arrayOf("src/main", "build"), "").second)
     }
 
     @Test
     fun cd() {
-        val currentPath = Paths.get("")
+        val curPath = Paths.get("")
         val srcPath = Paths.get("src")
         val srcMainPath = Paths.get("src/main")
 
@@ -77,17 +95,6 @@ classes"""
         assertEquals(srcPath.toAbsolutePath().toString(), pwd(arrayOf(), "").second)
 
         cd(arrayOf(".."), "")
-        assertEquals(currentPath.toAbsolutePath().toString(), pwd(arrayOf(), "").second)
-    }
-
-    @Test
-    fun grep() {
-        assertEquals("", grep(arrayOf("hello"), "Hello, world").second)
-        assertEquals("Hello, world\n", grep(arrayOf("Hello"), "Hello, world").second)
-        assertEquals("Hello, world\n", grep(arrayOf("^Hello"), "Hello, world").second)
-        assertEquals("", grep(arrayOf("Hello$"), "Hello, world").second)
-        assertEquals("Hello, world\n", grep(arrayOf("-i", "HELLO"), "Hello, world").second)
-        assertEquals("", grep(arrayOf("HELLO"), "Hello, world").second)
-        assertEquals("Hello\n", grep(arrayOf("-i", "-w", "HELLO"), "Hello, world").second)
+        assertEquals(curPath.toAbsolutePath().toString(), pwd(arrayOf(), "").second)
     }
 }
