@@ -12,7 +12,9 @@ import java.nio.file.Paths
  * Store for local vars and path.
  */
 object Environment {
-    fun path() = System.getProperty("user.dir")
+    val path: String
+        get() = System.getProperty("user.dir")
+
 
     private val vars = hashMapOf<String, String>()
 
@@ -20,15 +22,14 @@ object Environment {
      * Change user's working directory
      * @param dir directory name
      */
-    fun setUserDir(dir: String) {
-        val path = Paths.get(path()).resolve(dir).normalize().toAbsolutePath()
+    fun changeDir(dir: String) {
+        val path = Paths.get(path).resolve(dir).normalize().toAbsolutePath()
 
-        if (File(path.toString()).isDirectory) {
-            System.setProperty("user.dir", path.toString())
-        }
-        else {
+        if (!File(path.toString()).isDirectory) {
             throw DirNotFoundException(dir)
         }
+
+        System.setProperty("user.dir", path.toString())
     }
 
     /**
@@ -55,7 +56,7 @@ object Environment {
      * @return file content
      */
     fun readFile(file: String): String {
-        val file = File("${path()}/$file")
+        val file = File("${path}/$file")
         if (file.exists().not()) {
             throw FileNotFoundException()
         }
@@ -63,11 +64,9 @@ object Environment {
         return InputStreamReader(file.inputStream()).readText()
     }
 
-    fun listFilesInDir(dir: String): List<String> {
-        return File(dir).listFiles { f -> !f.isDirectory }.map { f -> f.name }
-    }
+    fun listFilesInDir(dir: String = Environment.path): List<String> =
+            File(dir).listFiles { f -> !f.isDirectory }.map { it.name }
 
-    fun listDirsInDir(dir: String): List<String> {
-        return File(dir).listFiles { f -> f.isDirectory }.map { f -> f.name }
-    }
+    fun listDirs(dir: String = Environment.path): List<String> =
+            File(dir).listFiles { f -> f.isDirectory }.map { it.name }
 }

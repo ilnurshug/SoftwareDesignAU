@@ -24,14 +24,14 @@ val STD_COMMANDS = hashMapOf(
  * @return pair of exit code and stdout
  */
 fun ls(args: Array<String>, input: String): Pair<Int, String> {
-    var arguments = args.filter { f -> File(f).isDirectory }
+    var arguments = args.filter { File(it).isDirectory }
 
     if (args.size == 0) {
-        arguments = arguments.plus(Environment.path())
+        arguments = arguments.plus(Environment.path)
     }
 
-    val res = arguments.map { path ->
-        path + ":\n" + Environment.listFilesInDir(path).joinToString("\n") + Environment.listDirsInDir(path).joinToString("\n")
+    val res = arguments.map {
+        "$it:\n${Environment.listFilesInDir(it).plus(Environment.listDirs(it)).joinToString("\n")}"
     }
 
     return Pair(0, res.joinToString("\n\n"))
@@ -48,7 +48,7 @@ fun cd(args: Array<String>, input: String): Pair<Int, String> {
         throw ArgumentsException("cd", 1, args.size)
     }
 
-    Environment.setUserDir(args[0])
+    Environment.changeDir(args[0])
     return Pair(0, "")
 }
 
@@ -94,7 +94,7 @@ fun pwd(args: Array<String>, input: String): Pair<Int, String> {
         throw ArgumentsException("pwd", 0, args.size)
     }
 
-    val path = Environment.path()
+    val path = Environment.path
     return Pair(0, path)
 }
 
