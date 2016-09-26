@@ -18,7 +18,7 @@ name
     : CHAR_SEQUENCE;
 
 content
-    : ~('\r' | '\n') ;
+    : ~('\r' | '\n' | '"' | '\'' ) | ',' ;
 
 variable
     : (DOLAR)name;
@@ -40,6 +40,7 @@ identifier
 // entities
 argument
     : identifier
+    | '-' identifier
     | string;
 
 lhs

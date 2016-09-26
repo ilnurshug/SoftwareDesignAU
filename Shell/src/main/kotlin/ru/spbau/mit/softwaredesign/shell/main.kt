@@ -4,6 +4,11 @@ import ru.spbau.mit.softwaredesign.shell.parser.expandMacroses
 import ru.spbau.mit.softwaredesign.shell.pipeline.buildPipeline
 import ru.spbau.mit.softwaredesign.shell.std.STD_COMMANDS
 
+/**
+ * Test cases for grep:
+ *
+ */
+
 fun main(args: Array<String>) {
     STD_COMMANDS.forEach { name, command -> Executor.register(name, command) }
 
