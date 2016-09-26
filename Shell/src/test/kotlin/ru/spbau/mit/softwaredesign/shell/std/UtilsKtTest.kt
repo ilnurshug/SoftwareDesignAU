@@ -84,7 +84,7 @@ kotlin-classes"""
 
     @Test
     fun cd() {
-        val curPath = Paths.get("")
+        val currentPath = Paths.get("")
         val srcPath = Paths.get("src")
         val srcMainPath = Paths.get("src/main")
 
@@ -95,6 +95,6 @@ kotlin-classes"""
         assertEquals(srcPath.toAbsolutePath().toString(), pwd(arrayOf(), "").second)
 
         cd(arrayOf(".."), "")
-        assertEquals(curPath.toAbsolutePath().toString(), pwd(arrayOf(), "").second)
+        assertEquals(currentPath.toAbsolutePath().toString(), pwd(arrayOf(), "").second)
     }
 }
